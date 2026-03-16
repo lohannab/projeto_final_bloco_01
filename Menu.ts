@@ -1,11 +1,15 @@
 import readlinesync = require("readline-sync");
+import { Vestidos } from "./src/model/Vestidos";
 
 export function main() {
 
     let opcao: number;
 
-    do {
-
+    do {         
+        //testando a visualização
+        const v1 = new Vestidos (1, "Vestido Floral", 1, 150.00, "M", "Longo");
+v1.visualizar();
+ 
         console.log("\n*****************************************************")
         console.log("\n                     Moda Atual                      ")
         console.log("\n*****************************************************")
