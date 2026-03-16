@@ -1,5 +1,6 @@
 import { Produtos } from "../model/Produtos";
 import { ProdutosRespository } from "../repository/ProdutosRepository";
+import { colors } from "../util/Cores";
 
 export class ProdutosController implements ProdutosRespository {
 
@@ -16,7 +17,7 @@ export class ProdutosController implements ProdutosRespository {
 
     cadastrarProduto(produto: Produtos): void {
         this.listaProdutos.push(produto)
-        console.log("Produto cadastrado com sucesso!")
+        console.log(colors.fg.green,"\nProduto cadastrado com sucesso!",colors.reset)
     }
 
     listarProdutos(): void {
@@ -30,7 +31,7 @@ export class ProdutosController implements ProdutosRespository {
         if (produto !== null) {
             produto.visualizar();
         } else {
-            console.log("Produto com o SKU: ", sku, " não foi encontrado!");
+            console.log(colors.fg.red,"\nProduto com o SKU: ",colors.fg.red, sku,colors.fg.red, " não foi encontrado!",colors.reset);
         }
     }
 
@@ -41,12 +42,12 @@ export class ProdutosController implements ProdutosRespository {
             if (buscaProduto !== null) {
                 const indice = this.listaProdutos.indexOf(buscaProduto);
                 this.listaProdutos[indice] = produto;
-                console.log("Produto atualizado com sucesso!");
+                console.log(colors.fg.green,"\nProduto atualizado com sucesso!",colors.reset);
             } else {
-                console.log("Não foi possível atualizar! Tente novamente.")
+                console.log(colors.fg.red,"\nNão foi possível atualizar! Tente novamente.",colors.reset)
             }
-        } catch (error: any) {   //se algo der ruim ele n quebra o codigo e imprime mensagem de erro
-            console.log(error.message);
+        } catch (error: any) {   
+            console.log(colors.fg.red,error.message,colors.reset);
         }
     }
 
@@ -56,9 +57,9 @@ export class ProdutosController implements ProdutosRespository {
         if (buscaProduto !== null) {
             const indice = this.listaProdutos.indexOf(buscaProduto);
             this.listaProdutos.splice(indice, 1)
-            console.log("Produto deletado com sucesso!");
+            console.log(colors.fg.green,"\nProduto deletado com sucesso!",colors.reset);
         } else {
-            console.log("Não foi possível deletar! Tente novamente.")
+            console.log(colors.fg.red,"\nNão foi possível deletar! Tente novamente.",colors.reset)
         }
     }
 

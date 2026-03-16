@@ -2,6 +2,7 @@ import readlinesync = require("readline-sync");
 import { Vestidos } from "./src/model/Vestidos";
 import { ProdutosController } from "./src/controller/ProdutosController";
 import { Bolsas } from "./src/model/Bolsas";
+import { colors } from "./src/util/Cores";
 
 export function main() {
 
@@ -12,31 +13,36 @@ export function main() {
 
     do {
 
-        console.log("\n*****************************************************")
-        console.log("\n                     Moda Atual                      ")
-        console.log("\n*****************************************************")
-        console.log("\n            1 - Cadastrar Produto                    ")
-        console.log("            2 - Listar todos os Produtos             ")
-        console.log("            3 - Consultar Produto por SKU            ")
-        console.log("            4 - Atualizar Produto                    ")
-        console.log("            5 - Deletar Produto                      ")
-        console.log("            6 - Sair                                 ")
-        console.log("\n*****************************************************")
-
+        console.log(colors.fg.magentastrong + colors.bg.black);
+        console.log("╔═════════════════════════════════════════════════════╗");
+        console.log("║                                                     ║");
+        console.log("║           MODA ATUAL - Gestão de Produtos           ║");
+        console.log("║                                                     ║");
+        console.log("╠═════════════════════════════════════════════════════╣");
+        console.log("║                                                     ║");
+        console.log("║      " + colors.fg.white + "1 - Cadastrar Produto                          " + colors.fg.magenta + "║");
+        console.log("║      " + colors.fg.white + "2 - Listar todos os Produtos                   " + colors.fg.magenta + "║");
+        console.log("║      " + colors.fg.white + "3 - Consultar Produto por SKU                  " + colors.fg.magenta + "║");
+        console.log("║      " + colors.fg.white + "4 - Atualizar Produto                          " + colors.fg.magenta + "║");
+        console.log("║      " + colors.fg.white + "5 - Deletar Produto                            " + colors.fg.magenta + "║");
+        console.log("║      " + colors.fg.white + "6 - Sair                                       " + colors.fg.magenta + "║");
+        console.log("║                                                     ║");
+        console.log("╚═════════════════════════════════════════════════════╝" + colors.reset);
+        console.log(colors.fg.whitestrong)
         opcao = readlinesync.questionInt("\n Digite a opção desejada: ")
-
+        console.log(colors.reset)
         if (opcao === 6) {
-            console.log("\n Moda atual - Você nunca fora de moda!");
+            console.log(colors.fg.magenta, "\n Moda atual - Você nunca fora de moda!", colors.reset);
             sobre();
             process.exit(0)
         }
 
         switch (opcao) {
             case 1:
-                console.log("\nCadastrar Produto");
+                console.log(colors.fg.whitestrong, "\nCadastrar Produto", colors.reset);
                 sku = readlinesync.questionInt("\nDigite o SKU do Produto: \n")
                 titulo = readlinesync.question("\nDigite o título do produto: \n")
-                console.log("Digite qual categoria: \n1 - Vestidos \n2-Bolsas")
+                console.log("Digite qual categoria: \n1 - Vestidos \n2 - Bolsas")
                 categoria = readlinesync.questionInt("\n")
                 switch (categoria) {
                     case 1:
@@ -55,46 +61,24 @@ export function main() {
                 keyPress()
                 break;
             case 2:
-                console.log("\nListar Produtos");
+                console.log(colors.fg.whitestrong, "\nListar Produtos", colors.reset);
                 produtos.listarProdutos();
                 keyPress()
                 break;
             case 3:
-                console.log("\nBuscar Pordutos");
+                console.log(colors.fg.whitestrong, "\nBuscar Pordutos", colors.reset);
                 sku = readlinesync.questionInt("\nDigite o SKU do produto: \n");
                 produtos.buscarProdutos(sku);
                 keyPress()
                 break;
             case 4:
-                console.log("\nAtualizar Produtos");
-                try {
-                    sku = readlinesync.questionInt("\nDigite o SKU do produto: \n");
-                    let busca = produtos.buscarNoArray(sku);
-
-                    if (busca !== null) {
-                        titulo = readlinesync.question("\nDigite o novo Título: \n");
-                        preco = readlinesync.questionFloat("\nDigite o novo Preço: \n");
-                        categoria = busca.tipo;
-
-                        if (categoria === 1) {
-                            tamanho = readlinesync.question("\nDigite o novo Tamanho: \n");
-                            comprimento = readlinesync.question("\nDigite o novo Comprimento: \n");
-                            produtos.atualizarProdutos(new Vestidos(sku, titulo, categoria, preco, tamanho, comprimento));
-                        } else {
-                            estilo = readlinesync.question("\nNovo Estilo: \n");
-                            carteira = readlinesync.keyInYNStrict("\nAcompanha carteira? \n");
-                            produtos.atualizarProdutos(new Bolsas(sku, titulo, categoria, preco, estilo, carteira));
-                        }
-                    } else {
-                        console.log("\nProduto não encontrado!");
-                    }
-                } catch (error: any) {
-                    console.log("\nErro ao atualizar: " + error.message);
-                }
+                console.log(colors.fg.whitestrong, "\nAtualizar Produtos", colors.reset);
+                sku = readlinesync.questionInt("\nDigite o SKU do produto: \n");
+                atualizarSubmenu(sku, produtos);
                 keyPress();
                 break;
             case 5:
-                console.log("\nDeletar Produto");
+                console.log(colors.fg.whitestrong, "\nDeletar Produto", colors.reset);
                 sku = readlinesync.questionInt("\nDigite o SKU do produto: \n");
                 produtos.deletar(sku);
                 keyPress()
@@ -111,17 +95,85 @@ export function main() {
 }
 
 function sobre(): void {
-    console.log("\n*****************************************************")
-    console.log("\nProjeto Desenvolvido por: ")
-    console.log("Lohanna B - lohannausa@gmail.com")
-    console.log("github.com/lohannab")
-    console.log("\n*****************************************************")
+    console.log(colors.fg.magenta + colors.bg.black);
+    console.log("╔═════════════════════════════════════════════════════╗");
+    console.log("║                                                     ║");
+    console.log("║              PROJETO DESENVOLVIDO POR:              ║");
+    console.log("║                                                     ║");
+    console.log(colors.fg.magenta + "║" + colors.fg.white + "             Lohanna B.                              " + colors.fg.magenta + "║");
+    console.log(colors.fg.magenta + "║" + colors.fg.white + "             Email: lohannausa@gmail.com             " + colors.fg.magenta + "║");
+    console.log(colors.fg.magenta + "║" + colors.fg.white + "             GitHub: github.com/lohannab             " + colors.fg.magenta + "║");
+    console.log("║                                                     ║");
+    console.log("╚═════════════════════════════════════════════════════╝");
+    console.log(colors.reset);
 
 }
 
 function keyPress(): void {
     console.log("\nPressione enter para continuar...");
     readlinesync.prompt();
+}
+
+function atualizarSubmenu(sku: number, controller: ProdutosController): void {
+    try {
+        const busca = controller.buscarNoArray(sku);
+        if (!busca) return console.log(colors.fg.red,"\nProduto não encontrado!", colors.reset);
+
+        let dados = {
+            titulo: busca.nome,
+            preco: busca.preco,
+            categoria: busca.tipo,
+            tamanho: (busca instanceof Vestidos) ? busca.tamanho : "",
+            comprimento: (busca instanceof Vestidos) ? busca.comprimento : "",
+            estilo: (busca instanceof Bolsas) ? busca.estilo : "",
+            carteira: (busca instanceof Bolsas) ? busca.carteira : false
+        };
+
+        let continua = true;
+        while (continua) {
+            console.log(`\nModificando: ${dados.titulo} (Categoria Atual: ${dados.categoria === 1 ? 'Vestido' : 'Bolsa'})`);
+            console.log("1 - Titulo            2 - Preço");
+            console.log("3 - Alterar Categoria 4 - Atributos especificos");
+            console.log("0 - Salvar e Sair");
+
+            const op = readlinesync.questionInt("\nO que deseja alterar? ");
+
+            switch (op) {
+                case 1:
+                    dados.titulo = readlinesync.question("Novo Titulo: ");
+                    break;
+                case 2:
+                    dados.preco = readlinesync.questionFloat("Novo Preço: ");
+                    break;
+                case 3:
+                    console.log(colors.bg.red, "\nATENÇÃO: Ao mudar a categoria, voce devera preencher os Atributos Especificos (Opcao 4).", colors.reset);
+                    dados.categoria = readlinesync.questionInt("Nova Categoria (1 - Vestido / 2 - Bolsa): ");
+                    break;
+                case 4:
+                    if (dados.categoria === 1) {
+                        dados.tamanho = readlinesync.question("Novo Tamanho: ");
+                        dados.comprimento = readlinesync.question("Novo Comprimento: ");
+                    } else {
+                        dados.estilo = readlinesync.question("Novo Estilo: ");
+                        dados.carteira = readlinesync.keyInYNStrict("Acompanha Carteira? ");
+                    }
+                    break;
+                case 0:
+                    continua = false;
+                    break;
+            }
+
+            if (op !== 0) continua = readlinesync.keyInYNStrict("\nDeseja alterar algo mais? ");
+        }
+
+        if (dados.categoria === 1) {
+            controller.atualizarProdutos(new Vestidos(sku, dados.titulo, 1, dados.preco, dados.tamanho, dados.comprimento));
+        } else {
+            controller.atualizarProdutos(new Bolsas(sku, dados.titulo, 2, dados.preco, dados.estilo, dados.carteira));
+        }
+    } catch (error: any) {
+        console.log(colors.fg.red, error.message, colors.reset);
+    }
 }
 
 main();
