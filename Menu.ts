@@ -1,15 +1,17 @@
 import readlinesync = require("readline-sync");
 import { Vestidos } from "./src/model/Vestidos";
+import { ProdutosController } from "./src/controller/ProdutosController";
+import { Bolsas } from "./src/model/Bolsas";
 
 export function main() {
 
-    let opcao: number;
+    let produtos: ProdutosController = new ProdutosController();
+    let opcao, sku, categoria, preco: number;
+    let titulo, tamanho, comprimento, estilo: string;
+    let carteira: boolean;
 
-    do {         
-        //testando a visualização
-        const v1 = new Vestidos (1, "Vestido Floral", 1, 150.00, "M", "Longo");
-v1.visualizar();
- 
+    do {
+
         console.log("\n*****************************************************")
         console.log("\n                     Moda Atual                      ")
         console.log("\n*****************************************************")
@@ -32,22 +34,69 @@ v1.visualizar();
         switch (opcao) {
             case 1:
                 console.log("\nCadastrar Produto");
+                sku = readlinesync.questionInt("\nDigite o SKU do Produto: \n")
+                titulo = readlinesync.question("\nDigite o título do produto: \n")
+                console.log("Digite qual categoria: \n1 - Vestidos \n2-Bolsas")
+                categoria = readlinesync.questionInt("\n")
+                switch (categoria) {
+                    case 1:
+                        tamanho = readlinesync.question("\nQual o tamanho? \nP|M|G|gg \n")
+                        comprimento = readlinesync.question("\nDigite o tamanho do comprimento: \n")
+                        preco = readlinesync.questionFloat("\nDigite o preço \n")
+                        produtos.cadastrarProduto(new Vestidos(sku, titulo, categoria, preco, tamanho, comprimento));
+                        break;
+                    case 2:
+                        estilo = readlinesync.question("\nQual o estilo da bolsa? \n")
+                        carteira = readlinesync.keyInYNStrict("\nAcompanha carteira?\n")
+                        preco = readlinesync.questionFloat("\nDigite o preço \n")
+                        produtos.cadastrarProduto(new Bolsas(sku, titulo, categoria, preco, estilo, carteira));
+                        break;
+                }
                 keyPress()
                 break;
             case 2:
                 console.log("\nListar Produtos");
+                produtos.listarProdutos();
                 keyPress()
                 break;
             case 3:
                 console.log("\nBuscar Pordutos");
+                sku = readlinesync.questionInt("\nDigite o SKU do produto: \n");
+                produtos.buscarProdutos(sku);
                 keyPress()
                 break;
             case 4:
                 console.log("\nAtualizar Produtos");
-                keyPress()
+                try {
+                    sku = readlinesync.questionInt("\nDigite o SKU do produto: \n");
+                    let busca = produtos.buscarNoArray(sku);
+
+                    if (busca !== null) {
+                        titulo = readlinesync.question("\nDigite o novo Título: \n");
+                        preco = readlinesync.questionFloat("\nDigite o novo Preço: \n");
+                        categoria = busca.tipo;
+
+                        if (categoria === 1) {
+                            tamanho = readlinesync.question("\nDigite o novo Tamanho: \n");
+                            comprimento = readlinesync.question("\nDigite o novo Comprimento: \n");
+                            produtos.atualizarProdutos(new Vestidos(sku, titulo, categoria, preco, tamanho, comprimento));
+                        } else {
+                            estilo = readlinesync.question("\nNovo Estilo: \n");
+                            carteira = readlinesync.keyInYNStrict("\nAcompanha carteira? \n");
+                            produtos.atualizarProdutos(new Bolsas(sku, titulo, categoria, preco, estilo, carteira));
+                        }
+                    } else {
+                        console.log("\nProduto não encontrado!");
+                    }
+                } catch (error: any) {
+                    console.log("\nErro ao atualizar: " + error.message);
+                }
+                keyPress();
                 break;
             case 5:
                 console.log("\nDeletar Produto");
+                sku = readlinesync.questionInt("\nDigite o SKU do produto: \n");
+                produtos.deletar(sku);
                 keyPress()
                 break;
             default:
